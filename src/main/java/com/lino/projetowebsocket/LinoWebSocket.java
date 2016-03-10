@@ -37,7 +37,7 @@ public class LinoWebSocket {
 
     @OnMessage
     public String onMessage(String message) {
-        return "Retorno do onMessage";
+        return "Retorno do onMessage ";
     }
 
     @OnOpen
