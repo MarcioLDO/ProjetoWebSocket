@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Start Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <div style="position: absolute; left: 400px; top: 300px; width: 400px;">
+            <table cellpadding="3" cellspacing="0" style="width: 100%; height: 100%; border: solid 1px black;">
+                <tr>
+                    <td style="text-align: right; width: 150px;">Mensagem:</td>
+                    <td>
+                        <input type="text" id="mensagem" class="text" onkeydown="INDEX.keydown(event);"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="remoto" style="text-align: center; padding-top: 100px;">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
+
+<script type="text/javascript">
+    INDEX = {
+        iniciar: function() {
+            this.criarWebSocket();
+            this.getElemento("mensagem").focus();
+        },
+        getElemento: function(elementoId) {
+            return document.getElementById(elementoId);
+        },
+        criarWebSocket: function() {
+            this.ws = new WebSocket("ws://localhost:8080/ProjetoWebSocket/url");
+            this.ws.onmessage = function(a, b, c, d) {
+                console.info(a);
+                console.info(b);
+                console.info(c);
+                console.info(d);
+                INDEX.getElemento("remoto").innerHTML += a.data + "</br>";
+            };
+        },
+        keydown: function(event) {
+            if (event.keyCode != 13) {
+                return;
+            }
+            this.enviarMensagem();
+        },
+        enviarMensagem: function() {
+            var mensagem = document.getElementById("mensagem").value;
+            this.ws.send(mensagem);
+        }
+    };
+    INDEX.iniciar();
+</script>
